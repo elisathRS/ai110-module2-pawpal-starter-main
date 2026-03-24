@@ -24,8 +24,43 @@
 **b. Design changes**
 
 - Did your design change during implementation?
+    Yes
 - If yes, describe at least one change and why you made it.
 
+    This update improves the code to make it safer and easier to use.
+    
+    ## 1. Renamed `type` → `species` in Pet
+    - `type` is a built-in Python function.
+    - Using it as an attribute can cause confusion and bugs.
+    - `species` is clearer and avoids conflicts.
+    
+    ## 2. Added `TaskStatus` enum
+    - Replaced `status: str` with `status: TaskStatus`.
+    - Prevents errors from typos like "pendng" or "Pending".
+    - Only valid values are allowed: `PENDING` and `COMPLETED`.
+    
+    ## 3. Added `id: UUID` to Task and Pet
+    - Names are not always unique (e.g., two pets named "Bella").
+    - UUID ensures each object is unique.
+    - Makes removing or finding items accurate and reliable.
+    
+    ## 4. Added `pet_id: UUID` to Task
+    - Keeps track of which pet a task belongs to.
+    - Important when tasks are combined into one list.
+    - Maintains the connection between task and pet.
+    
+    ## 5. Added `duration_minutes: int = 30` to Task
+    - Helps calculate how long a task lasts.
+    - Needed to detect time conflicts.
+    - Default duration is 30 minutes.
+    
+    ## 6. Added `priority: int = 2` to Task
+    - Allows tasks to be sorted by importance.
+    - Priority levels:
+      - `1 = High`
+      - `2 = Medium` (default)
+      - `3 = Low`
+    - Improves task organization beyond just time.
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
