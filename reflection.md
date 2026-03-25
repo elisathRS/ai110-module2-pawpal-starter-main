@@ -82,6 +82,7 @@
 **a. How you used AI**
 
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
+  
    - **Design brainstorming**
     - I used AI to plan the structure of the app.
     - It helped me decide the main classes and their roles.
@@ -110,30 +111,30 @@
     - It improved my GitHub README.
       
   - What kinds of prompts or questions were most helpful?
-  - 
-    - **"Explain this code step by step"**
-      - Helped me understand complex logic in simple terms.
     
-    - **"Why is this code not working?"**
-      - Useful for debugging and finding errors.
-    
-    - **"How can I improve this code?"**
-      - Helped with refactoring and making code cleaner.
-    
-    - **"What is a better name for this variable or method?"**
-      - Improved readability and clarity.
-    
-    - **"Give me an example"**
-      - Helped me understand concepts faster with simple examples.
-    
-    - **"What are best practices for this?"**
-      - Guided me to write more professional and reliable code.
-    
-    - **"What edge cases should I consider?"**
-      - Helped me think about problems I might miss.
-    
-    - **"Can you simplify this explanation?"**
-      - Made difficult topics easier to understand.
+      - **"Explain this code step by step"**
+        - Helped me understand complex logic in simple terms.
+      
+      - **"Why is this code not working?"**
+        - Useful for debugging and finding errors.
+      
+      - **"How can I improve this code?"**
+        - Helped with refactoring and making code cleaner.
+      
+      - **"What is a better name for this variable or method?"**
+        - Improved readability and clarity.
+      
+      - **"Give me an example"**
+        - Helped me understand concepts faster with simple examples.
+      
+      - **"What are best practices for this?"**
+        - Guided me to write more professional and reliable code.
+      
+      - **"What edge cases should I consider?"**
+        - Helped me think about problems I might miss.
+      
+      - **"Can you simplify this explanation?"**
+        - Made difficult topics easier to understand.
 
 **b. Judgment and verification**
 
