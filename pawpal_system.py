@@ -95,19 +95,11 @@ class Scheduler:
         return all_tasks
 
     def organize_tasks(self, tasks: list[Task]) -> list[Task]:
-        """Sort and prioritize a list of tasks for the day.
-
-        Primary sort: priority ascending (1=High comes first).
-        Secondary sort: due_date_time ascending.
-        """
+        """Sort tasks by priority (1=High first), then by due date and time."""
         return sorted(tasks, key=lambda t: (t.priority, t.due_date_time))
 
     def generate_daily_plan(self, owner: Owner) -> list[Task]:
-        """Produce an ordered daily schedule for the owner.
-
-        Collects all pending tasks due today, organizes them, then
-        resolves any time conflicts before returning the final plan.
-        """
+        """Return today's conflict-free, priority-ordered task schedule for the owner."""
         today = datetime.now().date()
         tasks = [
             t for t in self.collect_tasks(owner)
@@ -117,12 +109,7 @@ class Scheduler:
         return self.resolve_conflicts(organized)
 
     def resolve_conflicts(self, tasks: list[Task]) -> list[Task]:
-        """Adjust tasks that overlap in time.
-
-        Tasks are processed in priority order (already sorted by the caller).
-        If a task's start time overlaps with the previous task's window,
-        it is pushed out to start immediately after the previous task ends.
-        """
+        """Push any overlapping task to start immediately after the previous one ends."""
         resolved: list[Task] = []
         for task in tasks:
             if resolved:
