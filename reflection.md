@@ -171,7 +171,19 @@
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
+  
+    I am fairly confident, about 4 out of 5. Every main feature has at least one test. Status changes, sorting, recurrence, and conflict detection all pass. It is not a 5 because the UI and full       user flows are not tested. Also, resolve_conflicts changes task times directly, which could cause problems if the same tasks are used in other parts of the app.
+  
 - What edge cases would you test next if you had more time?
+  
+    - **Owner with no pets**  
+      Verify that `generate_daily_plan` returns an empty list and does not crash when the owner has no pets.
+    
+    - **Two pets with the same name**  
+      Check how `filter_by_pet` behaves, since it stops at the first match and may ignore tasks from the second pet.
+    
+    - **Task with `duration_minutes = 0`**  
+      Ensure this does not create false positives or missed conflicts in `detect_conflicts`.
 
 ---
 
