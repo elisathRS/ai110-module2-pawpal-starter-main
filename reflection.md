@@ -68,13 +68,23 @@
 **a. Constraints and priorities**
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
+    - **Time:** Tasks are scheduled based on their `due_date_time` and `duration_minutes`. The scheduler detects and resolves overlaps so tasks do not conflict.  
+    - **Priority:** Tasks are sorted by priority (1 = high, 2 = medium, 3 = low), so urgent tasks are scheduled earlier.  
+    - **Task status:** Only tasks with status `PENDING` are included in the daily schedule. Completed tasks are ignored.
   
 - How did you decide which constraints mattered most?
+  
+     I chose the most important constraints by thinking about a real pet care scenario. The most important constraints are priority and time. For example, giving medicine or feeding a pet at a          specific hour is critical, so high-priority tasks must happen first and tasks shouldn’t overlap. Task status is also important because we only need to schedule tasks that are still pending.
 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+  
+   The scheduler resolves overlapping tasks by pushing the later task to start immediately after the previous one ends.
+
 - Why is that tradeoff reasonable for this scenario?
+  
+   It is reasonable because this may slightly delay lower-priority tasks, but it ensures all tasks are completed without conflicts. In a pet care scenario, small delays are usually acceptable, and    it keeps the schedule simple and predictable.
 
 ---
 
