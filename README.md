@@ -35,7 +35,7 @@ Your final app should:
 
 ## UML Diagram 
 
-<img src="Pawpal_UML.png" alt="PawPal UML diagram" width="500">
+<img src="UML_diagram.png" alt="PawPal UML diagram" width="500">
 *Figure: PawPal UML diagram showing the relationships between Owner, Pet, Task, and Scheduler.*
 
 
