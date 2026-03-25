@@ -32,6 +32,11 @@ Your final app should:
 | `Owner` | `name`, `phone_number`, `email`, `pets` | Manages a list of pets belonging to the owner |
 | `Scheduler` | *(stateless service)* | Coordinates task collection, sorting, filtering, conflict detection, and daily plan generation across all pets |
 
+
+## UML Diagram 
+
+![UML diagram of the PawPal project](Pawpal_UML.png)
+*Figure: PawPal UML diagram showing the relationships between Owner, Pet, Task, and Scheduler.*
 ## Smarter Scheduling
 
 The `Scheduler` class goes beyond a simple sorted list. Here's what it can do:
