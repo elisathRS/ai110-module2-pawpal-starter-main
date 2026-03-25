@@ -26,8 +26,23 @@ with st.form("owner_form"):
         owner_email = st.text_input("Email")
     submitted = st.form_submit_button("Save owner")
     if submitted:
-        st.session_state.owner = Owner(name=owner_name, phone_number=owner_phone, email=owner_email)
-        st.success(f"Owner saved: {owner_name}")
+        errors = []
+        if not owner_name.strip():
+            errors.append("Full name is required.")
+        if not owner_phone.strip():
+            errors.append("Phone number is required.")
+        elif not owner_phone.strip().replace("-", "").replace(" ", "").replace("(", "").replace(")", "").isdigit():
+            errors.append("Phone number must contain only digits, spaces, or dashes.")
+        if not owner_email.strip():
+            errors.append("Email is required.")
+        elif "@" not in owner_email or "." not in owner_email.split("@")[-1]:
+            errors.append("Please enter a valid email address.")
+        if errors:
+            for e in errors:
+                st.error(e)
+        else:
+            st.session_state.owner = Owner(name=owner_name, phone_number=owner_phone, email=owner_email)
+            st.success(f"Owner saved: {owner_name}")
 
 if st.session_state.owner is None:
     st.info("Fill in your info above and click Save owner to get started.")
@@ -57,11 +72,24 @@ with st.form(f"pet_form_{st.session_state.pet_form_key}"):
         weight = st.number_input("Weight (lbs)", min_value=0.0, max_value=300.0, value=0.0)
     add_pet = st.form_submit_button("Add pet")
     if add_pet:
-        new_pet = Pet(name=pet_name, species=species, breed=breed,
-                      age=int(age), gender=gender, weight=float(weight))
-        owner.add_pet(new_pet)
-        st.session_state.pet_form_key += 1
-        st.rerun()
+        errors = []
+        if not pet_name.strip():
+            errors.append("Pet name is required.")
+        if not breed.strip():
+            errors.append("Breed is required.")
+        if age == 0:
+            errors.append("Age must be greater than 0.")
+        if weight == 0.0:
+            errors.append("Weight must be greater than 0.00 lbs.")
+        if errors:
+            for e in errors:
+                st.error(e)
+        else:
+            new_pet = Pet(name=pet_name, species=species, breed=breed,
+                          age=int(age), gender=gender, weight=float(weight))
+            owner.add_pet(new_pet)
+            st.session_state.pet_form_key += 1
+            st.rerun()
 
 current_pets = owner.list_pets()
 
@@ -110,6 +138,9 @@ else:
             task_title = st.text_input("Task title")
         with col2:
             duration = st.number_input("Duration (minutes)", min_value=1, max_value=240, value=1)
+        confirm_1min = False
+        if duration == 1:
+            confirm_1min = st.checkbox("⚠️ This task will last only 1 minute. Check to confirm.")
         with col3:
             priority_label = st.selectbox("Priority", ["High", "Medium", "Low"])
 
@@ -123,21 +154,32 @@ else:
 
         add_task = st.form_submit_button("Add task")
         if add_task:
-            target_pet = next(p for p in current_pets if p.name == target_name)
-            due_dt = datetime(task_date.year, task_date.month, task_date.day,
-                              task_time.hour, task_time.minute, 0)
-            priority_map = {"High": 1, "Medium": 2, "Low": 3}
-            new_task = Task(
-                description=task_title,
-                due_date_time=due_dt,
-                pet_id=target_pet.id,
-                duration_minutes=int(duration),
-                priority=priority_map[priority_label],
-                recurrence=None if recurrence == "None" else recurrence,
-            )
-            target_pet.add_task(new_task)
-            st.session_state.task_form_key += 1
-            st.rerun()
+            errors = []
+            if not task_title.strip():
+                errors.append("Task title is required.")
+            if task_time is None:
+                errors.append("Due time is required. Please select a time.")
+            if duration == 1 and not confirm_1min:
+                errors.append("Please confirm that the task duration will be only 1 minute.")
+            if errors:
+                for e in errors:
+                    st.error(e)
+            else:
+                target_pet = next(p for p in current_pets if p.name == target_name)
+                due_dt = datetime(task_date.year, task_date.month, task_date.day,
+                                  task_time.hour, task_time.minute, 0)
+                priority_map = {"High": 1, "Medium": 2, "Low": 3}
+                new_task = Task(
+                    description=task_title,
+                    due_date_time=due_dt,
+                    pet_id=target_pet.id,
+                    duration_minutes=int(duration),
+                    priority=priority_map[priority_label],
+                    recurrence=None if recurrence == "None" else recurrence,
+                )
+                target_pet.add_task(new_task)
+                st.session_state.task_form_key += 1
+                st.rerun()
 
 # ---------------------------------------------------------------------------
 # Section 3 — Filter & Manage Tasks
@@ -199,30 +241,31 @@ else:
                         st.rerun()
 
 # ---------------------------------------------------------------------------
-# Section 4 — Conflict Detection
-# ---------------------------------------------------------------------------
-st.divider()
-st.subheader("Conflict Detection")
-
-if st.button("Check for conflicts"):
-    warnings = scheduler.detect_conflicts(owner)
-    if not warnings:
-        st.success("No scheduling conflicts found.")
-    else:
-        for w in warnings:
-            st.warning(w)
-
-# ---------------------------------------------------------------------------
-# Section 5 — Generate Today's Schedule
+# Section 4 — Generate Today's Schedule
 # ---------------------------------------------------------------------------
 st.divider()
 st.subheader("Generate Today's Schedule")
 
 if st.button("Generate schedule"):
+    # --- Step 1: show conflicts found BEFORE the fix ---
+    conflicts = scheduler.detect_conflicts(owner)
+    if conflicts:
+        st.markdown("#### ⚠️ Conflicts Detected")
+        for w in conflicts:
+            st.warning(w)
+    else:
+        st.success("✅ No scheduling conflicts found.")
+
+    # --- Step 2: show the fixed schedule ---
     plan = scheduler.generate_daily_plan(owner)
     if not plan:
         st.warning("No pending tasks scheduled for today.")
     else:
+        if conflicts:
+            st.markdown("#### 📅 Fixed Schedule for Today")
+            st.caption("Overlapping tasks have been pushed to start after the previous one ends.")
+        else:
+            st.markdown("#### 📅 Schedule for Today")
         pet_lookup = {p.id: p.name for p in current_pets}
         rows = [
             {
