@@ -37,6 +37,8 @@ Your final app should:
 
 <img src="Pawpal_UML.png" alt="PawPal UML diagram" width="500">
 *Figure: PawPal UML diagram showing the relationships between Owner, Pet, Task, and Scheduler.*
+
+
 ## Smarter Scheduling
 
 The `Scheduler` class goes beyond a simple sorted list. Here's what it can do:
