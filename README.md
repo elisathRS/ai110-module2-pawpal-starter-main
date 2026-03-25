@@ -22,6 +22,16 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+## System Classes
+
+| Class | Attributes | Responsibilities |
+|-------|-----------|-----------------|
+| `TaskStatus` | `PENDING`, `COMPLETED` | Enum that restricts task status to valid values only |
+| `Task` | `description`, `due_date_time`, `pet_id`, `duration_minutes`, `priority`, `recurrence`, `status`, `id` | Stores task details and tracks completion status |
+| `Pet` | `name`, `species`, `age`, `gender`, `weight`, `breed`, `tasks`, `id` | Holds pet info and manages its own list of tasks |
+| `Owner` | `name`, `phone_number`, `email`, `pets` | Manages a list of pets belonging to the owner |
+| `Scheduler` | *(stateless service)* | Coordinates task collection, sorting, filtering, conflict detection, and daily plan generation across all pets |
+
 ## Smarter Scheduling
 
 The `Scheduler` class goes beyond a simple sorted list. Here's what it can do:
@@ -71,6 +81,14 @@ python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+### Run the demo
+
+```bash
+streamlit run app.py
+```
+
+Then open **http://localhost:8501** in your browser.
 
 ### Suggested workflow
 
