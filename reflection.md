@@ -151,6 +151,23 @@
 - What behaviors did you test?
 - Why were these tests important?
 
+  | Test | Why |
+|------|-----|
+| Task marked complete changes status | Core operation — the whole system depends on knowing what's done vs pending |
+| Adding tasks increases pet's task count | Ensures tasks are actually stored, not silently dropped |
+| Sort returns tasks earliest → latest | Daily plan is built on sorted order; wrong order = broken schedule |
+| Sort doesn't drop or duplicate tasks | A sort that loses tasks would corrupt the plan with no error |
+| Daily task spawns new task 1 day later | Recurring care (feeding, walks) must continue automatically |
+| New task inherits `recurrence="daily"` | Without this, the chain breaks after one completion |
+| Original task marked COMPLETED after recurring | Prevents the same task from appearing twice in the plan |
+| Weekly task spawns 1 week later | Same chain logic, different interval |
+| One-shot task returns None, adds nothing | Prevents phantom tasks from cluttering the schedule |
+| Overlapping tasks produce a warning | Owner needs to know when two tasks can't both happen as scheduled |
+| Warning includes both task names | A vague warning is useless — user needs to know *which* tasks conflict |
+| Back-to-back tasks produce no warning | Avoids false alarms for a perfectly valid schedule |
+| Empty task list produces no warning | Edge case — app shouldn't crash or warn on a fresh setup |
+| Conflicts across different pets are flagged | Owner can't be in two places at once regardless of which pet the task belongs to |
+
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
