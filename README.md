@@ -41,7 +41,7 @@ The `Scheduler` class goes beyond a simple sorted list. Here's what it can do:
 ### Run the tests
 
 ```bash
-python -m pytest
+python3 -m pytest
 ```
 
 ### What the tests cover
