@@ -210,7 +210,7 @@ else:
     elif filter_status == "Completed":
         filtered = scheduler.filter_by_status(filtered, TaskStatus.COMPLETED)
 
-    filtered = sorted(filtered, key=lambda t: t.due_date_time)
+    filtered = scheduler.sort_by_time(filtered)
 
     if not filtered:
         st.info("No tasks match the selected filters.")
@@ -241,31 +241,36 @@ else:
                         st.rerun()
 
 # ---------------------------------------------------------------------------
-# Section 4 — Generate Today's Schedule
+# Section 4 — Live Conflict Banner
+# ---------------------------------------------------------------------------
+st.divider()
+st.subheader("Scheduling Conflicts")
+
+live_conflicts = scheduler.detect_conflicts(owner)
+if not scheduler.collect_tasks(owner):
+    st.info("No tasks yet — nothing to check.")
+elif not live_conflicts:
+    st.success("No conflicts detected — your schedule is clean.")
+else:
+    st.error(f"{len(live_conflicts)} conflict(s) found. Overlapping tasks will be automatically adjusted when generating your daily schedule.")
+    for w in live_conflicts:
+        # Strip the leading "WARNING: " prefix — st.warning already signals it visually
+        clean = w.removeprefix("WARNING: ")
+        st.warning(clean)
+
+# ---------------------------------------------------------------------------
+# Section 5 — Generate Today's Schedule
 # ---------------------------------------------------------------------------
 st.divider()
 st.subheader("Generate Today's Schedule")
 
 if st.button("Generate schedule"):
-    # --- Step 1: show conflicts found BEFORE the fix ---
-    conflicts = scheduler.detect_conflicts(owner)
-    if conflicts:
-        st.markdown("#### ⚠️ Conflicts Detected")
-        for w in conflicts:
-            st.warning(w)
-    else:
-        st.success("✅ No scheduling conflicts found.")
-
-    # --- Step 2: show the fixed schedule ---
     plan = scheduler.generate_daily_plan(owner)
     if not plan:
         st.warning("No pending tasks scheduled for today.")
     else:
-        if conflicts:
-            st.markdown("#### 📅 Fixed Schedule for Today")
+        if live_conflicts:
             st.caption("Overlapping tasks have been pushed to start after the previous one ends.")
-        else:
-            st.markdown("#### 📅 Schedule for Today")
         pet_lookup = {p.id: p.name for p in current_pets}
         rows = [
             {

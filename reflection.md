@@ -151,7 +151,7 @@
 - What behaviors did you test?
 - Why were these tests important?
 
-  | Test | Why |
+| Test | Why |
 |------|-----|
 | Task marked complete changes status | Core operation — the whole system depends on knowing what's done vs pending |
 | Adding tasks increases pet's task count | Ensures tasks are actually stored, not silently dropped |
