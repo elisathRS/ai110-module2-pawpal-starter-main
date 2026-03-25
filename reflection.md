@@ -121,9 +121,6 @@
       - **"How can I improve this code?"**
         - Helped with refactoring and making code cleaner.
       
-      - **"What is a better name for this variable or method?"**
-        - Improved readability and clarity.
-      
       - **"Give me an example"**
         - Helped me understand concepts faster with simple examples.
       
@@ -133,13 +130,17 @@
       - **"What edge cases should I consider?"**
         - Helped me think about problems I might miss.
       
-      - **"Can you simplify this explanation?"**
-        - Made difficult topics easier to understand.
+
 
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
+  
+  I asked an AI to help handle overlapping tasks in my Scheduler class, and it suggested simply deleting conflicts. I realized this would remove important tasks, so I didn’t accept it as-is and      designed a method to adjust overlapping tasks instead.
+  
 - How did you evaluate or verify what the AI suggested?
+  
+  I evaluated the suggestion by reasoning through multiple task scenarios to see if any tasks would be lost. Then I wrote test cases simulating overlapping tasks for multiple pets and confirmed      that deleting conflicts would indeed remove tasks. This verification guided me to implement a safer approach that maintains all tasks while resolving conflicts automatically.
 
 ---
 
